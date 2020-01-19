@@ -1,17 +1,17 @@
 export interface QueueItem {
     id: string;
+    priority: number;
 }
-export declare type Tuple<T> = [T, number];
 export declare class PriorityQueue<T extends QueueItem> {
-    heap: Tuple<T>[];
+    heap: T[];
     constructor();
-    insert(val: T, priority: number): Tuple<T>[];
+    insert(item: T): T[];
     has({ id }: T): boolean;
     get({ id }: T): T | undefined;
-    shift(priority: boolean): T | Tuple<T> | undefined;
-    pop(priority: boolean): T | Tuple<T> | undefined;
+    shift(priority: boolean): T | undefined;
+    pop(): T | undefined;
     priorities(): number[];
     values(): T[];
     size(): number;
-    toArray(values: boolean): Tuple<T>[] | T[];
+    toArray(): T[];
 }

@@ -1,28 +1,27 @@
 export interface QueueItem {
   id: string;
+  priority: number;
 }
 
-export type Tuple<T> = [T, number];
-
 export class PriorityQueue<T extends QueueItem> {
-  heap: Tuple<T>[] = [];
+  heap: T[] = [];
 
   constructor() {}
 
-  insert(val: T, priority: number) {
-    if (!this.heap.length || this.heap[this.heap.length - 1][1] > priority) {
-      this.heap.push([val, priority]);
+  insert(item: T) {
+    if (!this.heap.length || this.heap[this.heap.length - 1].priority > item.priority) {
+      this.heap.push(item);
       return this.heap;
     }
 
-    const tmp: Tuple<T>[] = [];
+    const tmp: T[] = [];
     let found = false;
 
     for (let i = 0; i < this.heap.length; i++) {
-      const p = this.heap[i][1];
+      const p = this.heap[i].priority;
 
-      if (priority >= p && !found) {
-        tmp.push([val, priority]);
+      if (item.priority >= p && !found) {
+        tmp.push(item);
         found = true;
       }
 
@@ -33,52 +32,38 @@ export class PriorityQueue<T extends QueueItem> {
   }
 
   has({ id }: T) {
-    const foundNode = this.heap.find(([val]) => val.id == id);
+    const foundNode = this.heap.find((val) => val.id == id);
 
     return !!foundNode;
   }
 
   get({ id }: T) {
-    const foundNode = this.heap.find(([val]) => val.id == id);
+    const foundNode = this.heap.find((val) => val.id == id);
 
-    return foundNode && foundNode[0];
+    return foundNode;
   }
 
-  shift(priority: boolean) {
-    const tuple = this.heap.shift();
-    if (priority) {
-      return tuple;
-    }
-
-    return tuple ? tuple[0] : undefined;
+  shift(priority: boolean) : T | undefined {
+    return this.heap.shift();
   }
 
-  pop(priority: boolean) {
-    const tuple = this.heap.pop();
-
-    if (priority) {
-      return tuple;
-    }
-
-    return tuple ? tuple[0] : undefined;
+  pop() : T | undefined {
+    return this.heap.pop();
   }
 
-  priorities() {
-    return this.heap.map(([_, p]) => p);
+  priorities(): number[] {
+    return this.heap.map((item) => item.priority);
   }
 
-  values() {
-    return this.heap.map(([val]) => val);
+  values(): T[] {
+    return this.heap.map((val) => val);
   }
 
-  size() {
+  size(): number {
     return this.heap.length;
   }
 
-  toArray(values: boolean) {
-    if (values) {
-      return this.heap.map(([val]) => val);
-    }
+  toArray(): T[] {
     return this.heap;
   }
 }
