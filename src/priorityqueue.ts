@@ -1,11 +1,10 @@
-export interface Node {
-  x: number;
-  y: number;
+export interface QueueItem {
+  id: string;
 }
 
 export type Tuple<T> = [T, number];
 
-export class PriorityQueue<T extends Node> {
+export class PriorityQueue<T extends QueueItem> {
   heap: Tuple<T>[] = [];
 
   constructor() {}
@@ -33,14 +32,14 @@ export class PriorityQueue<T extends Node> {
     return (this.heap = tmp);
   }
 
-  has({ x, y }: T) {
-    const foundNode = this.heap.find(([val]) => val.x === x && val.y === y);
+  has({ id }: T) {
+    const foundNode = this.heap.find(([val]) => val.id == id);
 
     return !!foundNode;
   }
 
-  get({ x, y }: T) {
-    const foundNode = this.heap.find(([val]) => val.x === x && val.y === y);
+  get({ id }: T) {
+    const foundNode = this.heap.find(([val]) => val.id == id);
 
     return foundNode && foundNode[0];
   }
